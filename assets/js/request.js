@@ -18,7 +18,14 @@ window.onload = () => {
           <p><strong>Name:</strong> ${match["First Name"]} ${match["Last Name"]}</p>
           <p><strong>Address:</strong> ${match["Address"] || "N/A"}</p>
           <p><strong>Contact:</strong> ${match["Contact"] || "N/A"}</p>
-          <p><strong>Birthday:</strong> ${match["Birthday"]?.split("T")[0] || "N/A"}</p>
+          <p><strong>Birthday:</strong> ${
+              match["Birthday"]
+                ? new Date(match["Birthday"]).toLocaleDateString("en-US", {
+                    timeZone: "Asia/Manila",
+                    year: "numeric",
+                    month: "long",
+                    day: "2-digit"
+                    }): "N/A"}</p>
           <p><strong>Civil Status:</strong> ${match["Civil Status"] || "N/A"}</p>
         `;
       }
@@ -117,3 +124,4 @@ window.onload = () => {
 function goBack() {
   window.location.href = "search.html";
 }
+
