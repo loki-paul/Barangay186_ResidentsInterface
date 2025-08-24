@@ -1,0 +1,65 @@
+body {
+  background-color: #f0f2f5;
+  font-family: 'Courier New', monospace; /* Good for receipts */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.container-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  max-width: 500px;
+  width: 100%;
+}
+
+.queue-number {
+  font-size: 60px;
+  font-weight: bold;
+  color: #000;
+}
+
+.date-time {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.document-list {
+  text-align: left;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.countdown, .btn-back {
+  margin-top: 10px;
+}
+
+/* ✅ Thermal printer style (58mm paper) */
+@media print {
+  body {
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  .container-box {
+    box-shadow: none;
+    border-radius: 0;
+    max-width: 58mm;  /* for 58mm thermal printer */
+    width: 100%;
+    padding: 5mm;
+  }
+  .countdown, .btn-back {
+    display: none !important; /* don't print countdown or back button */
+  }
+  .queue-number {
+    font-size: 40px;
+  }
+  .document-list {
+    font-size: 12px;
+  }
+}

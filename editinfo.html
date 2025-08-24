@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Resident Information</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      background-color: #f4f4f4; 
+      padding: 20px; 
+    }
+    .container { 
+      max-width: 600px; 
+      margin: auto; 
+      background: white; 
+      padding: 20px; 
+      border-radius: 10px; 
+      box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+    }
+    h2 { text-align: center; }
+    label { 
+      display: block; 
+      margin-top: 10px; 
+      font-weight: bold; 
+    }
+    input, select { 
+      width: 100%; 
+      padding: 8px; 
+      margin-top: 5px; 
+      border: 1px solid #ccc; 
+      border-radius: 4px; 
+    }
+    button { 
+      width: 100%; 
+      padding: 10px; 
+      margin-top: 15px; 
+      background-color: #003b5b; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+    }
+    button:hover { background-color: #002a42; }
+    .loading { 
+      text-align: center; 
+      margin-top: 10px; 
+      display: none; 
+    }
+
+    /* Modal overlay styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .modal-box {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      max-width: 320px;
+      width: 90%;
+    }
+
+    .modal-box h3 {
+      margin: 0 0 20px;
+      font-size: 24px;
+      color: #003b5b;
+    }
+
+    .modal-box button {
+      width: auto;
+      padding: 8px 20px;
+      background-color: #003b5b;
+      margin: 0 auto;
+      display: block;
+    }
+
+    /* Back button style */
+    #back-btn {
+      background-color: #777;
+      margin-top: 10px;
+    }
+    #back-btn:hover {
+      background-color: #555;
+    }
+      body::before {
+      content: "";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 800px;
+      height: 800px;
+      background-image: url("brgy186logo.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0.3;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      pointer-events: none;
+      border-radius: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Edit Resident Information</h2>
+    <form id="edit-form">
+      <label for="id">Resident ID</label>
+      <input type="text" id="id" name="id" readonly />
+      
+      <label for="firstname">First Name</label>
+      <input type="text" id="firstname" name="firstname" required />
+      
+      <label for="middlename">Middle Name</label>
+      <input type="text" id="middlename" name="middlename" required />
+      
+      <label for="lastname">Last Name</label>
+      <input type="text" id="lastname" name="lastname" required />
+      
+      <label for="suffix">Suffix</label>
+      <input type="text" id="suffix" name="suffix" />
+      
+      <label for="birthday">Birthday</label>
+      <input type="date" id="birthday" name="birthday" required />
+      
+      <label for="complete_address">Complete Address</label>
+      <input type="text" id="complete_address" name="complete_address" required />
+      
+      <label for="contact">Contact Number</label>
+      <input type="text" id="contact" name="contact" required />
+      
+      <label for="sex">Sex</label>
+      <select id="sex" name="sex" required>
+        <option value="" disabled selected>Select Sex</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      
+      <label for="birthplace">Birthplace</label>
+      <input type="text" id="birthplace" name="birthplace" required />
+      
+      <label for="civilstatus">Civil Status</label>
+      <select id="civilstatus" name="civilstatus" required>
+        <option value="" disabled selected>Select Civil Status</option>
+        <option value="Single">Single</option>
+        <option value="Married">Married</option>
+        <option value="Widowed">Widowed</option>
+      </select>
+      
+      <label for="religion">Religion</label>
+      <input type="text" id="religion" name="religion" required />
+      
+      <label for="yearofstay">Lenght of Stay (e.g. 6)</label>
+      <input type="number" id="yearofstay" name="yearofstay" required />
+      
+      <label for="citizenship">Citizenship</label>
+      <input type="text" id="citizenship" name="citizenship" required />
+      
+      <button type="submit" id="update-btn">Update Information</button>
+    </form>
+
+    <button id="back-btn" type="button">Back</button>
+
+    <div class="loading" id="loading">Updating... Please wait</div>
+  </div>
+
+  <!-- Modal overlay -->
+  <div class="modal-overlay" id="submitted-modal">
+    <div class="modal-box">
+      <h3>Information Submitted!</h3>
+      <button id="modal-ok-btn">OK</button>
+    </div>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxbyOy06uk-DTPOAoItnPsT2TzclGNlCWv5xPbUCICV-2OHGPa2OHPBg3qTNA6nzkymPg/exec";
+    
+    // Get resident ID from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const residentID = urlParams.get('id');
+
+    // Fetch resident data on page load
+    if (residentID) {
+      fetchResidentData(residentID);
+    } else {
+      alert("No Resident ID provided!");
+    }
+
+    function fetchResidentData(id) {
+      const loadingElem = document.getElementById("loading");
+      loadingElem.style.display = "block";
+      fetch(`${scriptURL}?query=${encodeURIComponent(id)}`)
+        .then(response => response.json())
+        .then(data => {
+          loadingElem.style.display = "none";
+          if (data.records && data.records.length > 0) {
+            const resident = data.records[0];
+            document.getElementById("id").value = resident["ID"];
+            document.getElementById("firstname").value = resident["First Name"] || "";
+            document.getElementById("middlename").value = resident["Middle Name"] || "";
+            document.getElementById("lastname").value = resident["Last Name"] || "";
+            document.getElementById("suffix").value = resident["Suffix"] || "";
+            document.getElementById("birthday").value = resident["Birthday"] ? resident["Birthday"].split("T")[0] : "";
+            document.getElementById("complete_address").value = resident["Complete Address"] || resident["Address"] || "";
+            document.getElementById("contact").value = resident["Contact"] || "";
+            document.getElementById("sex").value = resident["Sex"] || "";
+            document.getElementById("birthplace").value = resident["Birthplace"] || "";
+            document.getElementById("civilstatus").value = resident["Civil Status"] || "";
+            document.getElementById("religion").value = resident["Religion"] || "";
+            document.getElementById("yearofstay").value = resident["Year of Stay"] || "";
+            document.getElementById("citizenship").value = resident["Citizenship"] || "";
+          } else {
+            alert("Resident not found!");
+          }
+        })
+        .catch(error => {
+          document.getElementById("loading").style.display = "none";
+          alert("Error fetching resident data: " + error);
+        });
+    }
+
+    // Show modal instead of alert on form submit (prototype)
+    document.getElementById("edit-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const modal = document.getElementById("submitted-modal");
+      modal.style.display = "flex";
+
+      // Optional auto-hide after 3 seconds (comment out if you want manual close only)
+      // setTimeout(() => {
+      //   modal.style.display = "none";
+      // }, 3000);
+    });
+
+    // Modal OK button closes modal
+    document.getElementById("modal-ok-btn").addEventListener("click", function() {
+      document.getElementById("submitted-modal").style.display = "none";
+    });
+
+    // Back button navigates back to previous page
+    document.getElementById("back-btn").addEventListener("click", function() {
+      window.history.back();
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+</body>
+</html>

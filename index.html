@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Barangay 186 portal for residents - fill up forms and search resident information." />
+  <title>Welcome to Barangay 186</title>
+  <link rel="stylesheet" href="assets/css/index.css" />
+</head>
+<body>
+
+  <div class="image-header">
+    <img src="assets/images/header.png" alt="Header" class="img-fluid w-100" />
+    <div id="datetimeTop" class="datetime-overlay"></div>
+  </div>
+
+  <main>
+    <div class="search-wrapper">
+      <div class="input-group mb-3">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search Name / user_id..." />
+        <button class="btn btn-search" id="searchBtn">🔍</button>
+      </div>
+      <button class="fillup-btn" onclick="window.location.href='form.html'">Fill-Up New Form</button>
+    </div>
+  </main>
+
+  <div class="image-footer">
+    <img src="assets/images/footer.png" alt="Footer" class="img-fluid w-100" />
+  </div>
+
+  <script src="assets/js/index.js"></script>
+</body>
+</html>
