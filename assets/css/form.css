@@ -1,0 +1,39 @@
+body {
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+.container {
+  opacity: 0.90;
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+  text-align: center;
+  font-size: 14px;
+  display: none;
+  margin-top: 10px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  background-image: url("../images/brgy186logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.3;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 100%;
+}
