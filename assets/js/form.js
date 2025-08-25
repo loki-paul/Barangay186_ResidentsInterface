@@ -1,5 +1,5 @@
 const scriptURL = "https://script.google.com/macros/s/AKfycbz4OCykrmhBSEb1WHQ5497XmUGKNhq-eedT5umhNhvZgYg1623fgLygaUmXJSdBItar2g/exec";
-const getIdURL = "https://script.google.com/macros/s/AKfycbwmk_AzHIsdr_QMmz8HC3evrON2ss46X9CY4nmD7T8E37WWDEQn2L70U3JTzGwQqzwM/exec"; // <-- new script for getting ID
+const getIdURL = "https://script.google.com/macros/s/AKfycbwmk_AzHIsdr_QMmz8HC3evrON2ss46X9CY4nmD7T8E37WWDEQn2L70U3JTzGwQqzwM/exec";
 const form = document.getElementById("barangay-form");
 const submitBtn = document.getElementById("submit-btn");
 const loadingMessage = document.getElementById("loading");
@@ -27,38 +27,61 @@ form.addEventListener("submit", (e) => {
       }
 
       if (data.status === "success") {
-        // ✅ Now fetch the newly added resident ID from the second script
+        //  Fetch the newly added resident ID
         fetch(getIdURL)
           .then(res => res.json())
           .then(idData => {
             if (idData.status === "success") {
               const residentID = idData.residentId;
 
-              // Show modal asking user
-              const requestModal = new bootstrap.Modal(document.getElementById("requestModal"));
-              requestModal.show();
+              // Show Success + QR Modal
+              document.getElementById("residentIdDisplay").textContent = residentID;
 
+              const qrContainer = document.getElementById("qrcode");
+              qrContainer.innerHTML = ""; // clear old QR
+              new QRCode(qrContainer, {
+                text: residentID,
+                width: 150,
+                height: 150
+              });
+
+              const successModal = new bootstrap.Modal(document.getElementById("successModal"));
+              successModal.show();
+
+              // Print option
+              document.getElementById("yesPrintBtn").onclick = () => {
+                let printWindow = window.open("", "_blank");
+                printWindow.document.write(`
+                  <html><head><title>Print QR Code</title></head><body>
+                  <h3>Resident ID: ${residentID}</h3>
+                  ${qrContainer.innerHTML}
+                  </body></html>
+                `);
+                printWindow.document.close();
+                printWindow.print();
+              };
+
+              // No print → show Request Modal
+              document.getElementById("noPrintBtn").onclick = () => {
+                successModal.hide();
+                const requestModal = new bootstrap.Modal(document.getElementById("requestModal"));
+                requestModal.show();
+
+                // Yes → go to request page
+                document.getElementById("yesRequestBtn").onclick = () => {
+                  requestModal.hide();
+                  window.location.href = `request.html?id=${encodeURIComponent(residentID)}`;
+                };
+
+                // No → back to index
+                document.querySelector("#requestModal .btn-secondary").onclick = () => {
+                  window.location.href = "index.html";
+                };
+              };
+
+              // Reset form
               form.reset();
               document.getElementById("other_religion").style.display = "none";
-
-              // 👉 If Yes → go to request page with ID
-              document.getElementById("yesRequestBtn").onclick = () => {
-                requestModal.hide();
-
-                submitBtn.disabled = true;
-                submitBtn.innerText = "Loading...";
-                loadingMessage.style.display = "block";
-
-                setTimeout(() => {
-                  window.location.href = `request.html?id=${encodeURIComponent(residentID)}`;
-                }, 1500);
-              };
-
-              // 👉 If No → back to index.html
-              document.querySelector("#requestModal .btn-secondary").onclick = () => {
-                window.location.href = "index.html";
-              };
-
             } else {
               alert("Error getting resident ID: " + idData.message);
             }
@@ -75,4 +98,32 @@ form.addEventListener("submit", (e) => {
       submitBtn.innerText = "Submit";
       loadingMessage.style.display = "none";
     });
+});
+
+function toggleOtherReligion(select) {
+  const otherField = document.getElementById("other_religion");
+  if (select.value === "Others") {
+    otherField.style.display = "block";
+    otherField.required = true;
+  } else {
+    otherField.style.display = "none";
+    otherField.required = false;
+    otherField.value = ""; // clear leftover text
+  }
+}
+
+// Handle "No Middle Name" checkbox
+const noMiddleNameCheckbox = document.getElementById("noMiddleName");
+const middleNameInput = document.getElementById("middlename");
+
+noMiddleNameCheckbox.addEventListener("change", function () {
+  if (this.checked) {
+    middleNameInput.value = "N/A";
+    middleNameInput.disabled = true;
+    middleNameInput.removeAttribute("required");
+  } else {
+    middleNameInput.value = "";
+    middleNameInput.disabled = false;
+    middleNameInput.setAttribute("required", "true");
+  }
 });
