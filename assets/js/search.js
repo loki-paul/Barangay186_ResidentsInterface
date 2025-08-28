@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbzVREmQ5BtvLXBz3BLxb3dE9J1p2PDttyBmzAXdcfJi99ugs2AnZBr3p6HOOd3L5nPNew/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbz4OCykrmhBSEb1WHQ5497XmUGKNhq-eedT5umhNhvZgYg1623fgLygaUmXJSdBItar2g/exec";
 let currentData = [];
 let selectedID = null;
 
@@ -111,3 +111,4 @@ function proceedToEdit() {
   // ✅ For prototype, we skip actual birthday validation
   window.location.href = `editinfo.html?id=${encodeURIComponent(selectedID)}`;
 }
+
