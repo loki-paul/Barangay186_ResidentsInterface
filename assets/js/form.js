@@ -45,6 +45,7 @@ function handleFormSubmit(e) {
       }
 
       if (data.status === "success") {
+
         // Fetch the newly added resident ID
         fetch(getIdURL)
           .then(res => res.json())
@@ -52,7 +53,7 @@ function handleFormSubmit(e) {
             if (idData.status === "success") {
               const residentID = idData.residentId;
 
-              // 🔹 Show Success + QR Modal
+              // Show Success + QR Modal
               document.getElementById("residentIdDisplay").textContent = residentID;
 
               const qrContainer = document.getElementById("qrcode");
@@ -65,39 +66,62 @@ function handleFormSubmit(e) {
                 height: 150
               });
 
-              // Add Download Button
-              const downloadBtn = document.createElement("button");
-              downloadBtn.className = "btn btn-success mt-2";
-              downloadBtn.textContent = "Download QR Code";
-              qrContainer.appendChild(downloadBtn);
+              // Save QR Code when "Yes" is clicked
+              document.getElementById("yesPrintBtn").onclick = () => {
+                const qrImg = qrContainer.querySelector("img");
+                const qrCanvas = qrContainer.querySelector("canvas");
 
-              downloadBtn.onclick = () => {
-                const qrImg = qrContainer.querySelector("img") || qrContainer.querySelector("canvas");
-                if (qrImg) {
+                let dataURL = "";
+
+                if (qrImg && qrImg.src) {
+                  dataURL = qrImg.src;
+                } else if (qrCanvas) {
+                  dataURL = qrCanvas.toDataURL("image/png");
+                }
+
+                if (dataURL) {
                   const link = document.createElement("a");
-                  link.href = qrImg.src || qrImg.toDataURL("image/png");
+                  link.href = dataURL;
                   link.download = `ResidentQR_${residentID}.png`;
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
+                } else {
+                  alert("QR Code not found!");
                 }
               };
+
 
               const successModal = new bootstrap.Modal(document.getElementById("successModal"));
               successModal.show();
 
               // Print option
               document.getElementById("yesPrintBtn").onclick = () => {
-                let printWindow = window.open("", "_blank");
-                printWindow.document.write(`
-                  <html><head><title>Print QR Code</title></head><body>
-                  <h3>Resident ID: ${residentID}</h3>
-                  ${qrContainer.innerHTML}
-                  </body></html>
-                `);
-                printWindow.document.close();
-                printWindow.print();
+                const qrImg = qrContainer.querySelector("img");
+                const qrCanvas = qrContainer.querySelector("canvas");
+
+                let dataURL = "";
+
+                if (qrImg && qrImg.src) {
+                  // If QR is generated as an <img>
+                  dataURL = qrImg.src;
+                } else if (qrCanvas) {
+                  // If QR is generated as a <canvas>
+                  dataURL = qrCanvas.toDataURL("image/png");
+                }
+
+                if (dataURL) {
+                  const link = document.createElement("a");
+                  link.href = dataURL;
+                  link.download = `ResidentQR_${residentID}.png`; // filename
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                } else {
+                  alert("QR Code not found!");
+                }
               };
+
 
               // No print → show Request Modal
               document.getElementById("noPrintBtn").onclick = () => {
@@ -149,7 +173,7 @@ function toggleOtherReligion(select) {
   } else {
     otherField.style.display = "none";
     otherField.required = false;
-    otherField.value = "";
+    otherField.value = ""; // clear leftover text
   }
 }
 
@@ -193,7 +217,7 @@ acceptTermsBtn.addEventListener("click", () => {
   formSubmitPending = false;
 });
 
-
+// Global fix: Blur focused buttons in modals before hiding (to avoid aria-hidden warning)
 document.addEventListener("click", (e) => {
   if (e.target.closest(".modal") && e.target.tagName === "BUTTON") {
     e.target.blur();
