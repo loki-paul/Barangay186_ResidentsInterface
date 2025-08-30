@@ -4,7 +4,25 @@ const form = document.getElementById("barangay-form");
 const submitBtn = document.getElementById("submit-btn");
 const loadingMessage = document.getElementById("loading");
 
-form.addEventListener("submit", (e) => {
+const contactInput = document.getElementById("contactnumber");
+const contactFeedback = document.getElementById("contactFeedback");
+
+// Validate Contact Number
+contactInput.addEventListener("input", () => {
+  const value = contactInput.value;
+  const valid = /^09\d{9}$/.test(value); // Must start with 09 and be 11 digits
+
+  if (valid) {
+    contactInput.classList.remove("is-invalid");
+    contactInput.classList.add("is-valid");
+  } else {
+    contactInput.classList.remove("is-valid");
+    contactInput.classList.add("is-invalid");
+  }
+});
+
+// Submit Form (core logic)
+function handleFormSubmit(e) {
   e.preventDefault();
 
   submitBtn.disabled = true;
@@ -27,23 +45,43 @@ form.addEventListener("submit", (e) => {
       }
 
       if (data.status === "success") {
-        //  Fetch the newly added resident ID
+        // Fetch the newly added resident ID
         fetch(getIdURL)
           .then(res => res.json())
           .then(idData => {
             if (idData.status === "success") {
               const residentID = idData.residentId;
 
-              // Show Success + QR Modal
+              // 🔹 Show Success + QR Modal
               document.getElementById("residentIdDisplay").textContent = residentID;
 
               const qrContainer = document.getElementById("qrcode");
               qrContainer.innerHTML = ""; // clear old QR
+
+              // Generate QR
               new QRCode(qrContainer, {
                 text: residentID,
                 width: 150,
                 height: 150
               });
+
+              // Add Download Button
+              const downloadBtn = document.createElement("button");
+              downloadBtn.className = "btn btn-success mt-2";
+              downloadBtn.textContent = "Download QR Code";
+              qrContainer.appendChild(downloadBtn);
+
+              downloadBtn.onclick = () => {
+                const qrImg = qrContainer.querySelector("img") || qrContainer.querySelector("canvas");
+                if (qrImg) {
+                  const link = document.createElement("a");
+                  link.href = qrImg.src || qrImg.toDataURL("image/png");
+                  link.download = `ResidentQR_${residentID}.png`;
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+              };
 
               const successModal = new bootstrap.Modal(document.getElementById("successModal"));
               successModal.show();
@@ -82,6 +120,8 @@ form.addEventListener("submit", (e) => {
               // Reset form
               form.reset();
               document.getElementById("other_religion").style.display = "none";
+              contactInput.classList.remove("is-valid", "is-invalid");
+
             } else {
               alert("Error getting resident ID: " + idData.message);
             }
@@ -98,8 +138,9 @@ form.addEventListener("submit", (e) => {
       submitBtn.innerText = "Submit";
       loadingMessage.style.display = "none";
     });
-});
+}
 
+// Handle "Other Religion"
 function toggleOtherReligion(select) {
   const otherField = document.getElementById("other_religion");
   if (select.value === "Others") {
@@ -108,7 +149,7 @@ function toggleOtherReligion(select) {
   } else {
     otherField.style.display = "none";
     otherField.required = false;
-    otherField.value = ""; // clear leftover text
+    otherField.value = "";
   }
 }
 
@@ -125,5 +166,36 @@ noMiddleNameCheckbox.addEventListener("change", function () {
     middleNameInput.value = "";
     middleNameInput.disabled = false;
     middleNameInput.setAttribute("required", "true");
+  }
+});
+
+// Terms & Conditions flow
+const termsModal = new bootstrap.Modal(document.getElementById("termsModal"));
+const acceptTermsBtn = document.getElementById("acceptTermsBtn");
+
+let formSubmitPending = false;
+
+// Intercept Submit
+form.addEventListener("submit", (e) => {
+  if (!formSubmitPending) {
+    e.preventDefault(); // stop normal submit
+    termsModal.show();
+  } else {
+    handleFormSubmit(e); // proceed with real submit
+  }
+});
+
+// When user accepts terms → actually submit form
+acceptTermsBtn.addEventListener("click", () => {
+  termsModal.hide();
+  formSubmitPending = true;
+  form.requestSubmit(); // re-trigger form submit
+  formSubmitPending = false;
+});
+
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".modal") && e.target.tagName === "BUTTON") {
+    e.target.blur();
   }
 });
