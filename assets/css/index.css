@@ -103,33 +103,15 @@ main {
   transform: scale(1.05);
 }
 
-
-.form-control {
-  font-size: 18px;
-  padding: 10px 15px;
-  border: 1px solid #000;
-  border-radius: 5px;
-  flex: 1;
-}
-
-.btn-search {
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: none;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  white-space: nowrap;
-}
-
-.btn-search:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .fillup-btn {
-  margin-top: 20px;
   background-color: #007bff;
   color: #fff;
   padding: 14px 28px;
@@ -138,12 +120,51 @@ main {
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.3s ease;
   width: 100%;
-  max-width: 300px;
+  max-width: 250px;
 }
 
 .fillup-btn:hover {
   background-color: #0056b3;
   transform: scale(1.05);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.close-btn {
+  float: right;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#qrScanner {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 @media (max-width: 768px) {
