@@ -12,7 +12,6 @@ document.getElementById("searchInput").addEventListener("keyup", function (event
   if (event.key === "Enter") searchResident();
 });
 
-
 function updateDateTime() {
   const now = new Date();
   const options = {
@@ -44,7 +43,14 @@ scanQrBtn.addEventListener("click", () => {
 
   Html5Qrcode.getCameras().then(cameras => {
     if (cameras && cameras.length) {
-      const cameraId = cameras[0].id;
+      
+      let cameraId = cameras[0].id;
+      for (const cam of cameras) {
+        if (/back|rear|environment/gi.test(cam.label)) {
+          cameraId = cam.id;
+          break;
+        }
+      }
 
       html5QrCode.start(
         cameraId,
@@ -52,7 +58,7 @@ scanQrBtn.addEventListener("click", () => {
         qrCodeMessage => {
           html5QrCode.stop().then(() => {
             qrModal.style.display = "none";
-            openRequestPage(qrCodeMessage); 
+            openRequestPage(qrCodeMessage);
           }).catch(err => console.error(err));
         },
         errorMessage => {
