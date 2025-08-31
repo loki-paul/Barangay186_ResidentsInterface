@@ -4,8 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description"
-    content="Barangay 186 portal for residents - fill up forms and search resident information." />
+  <meta name="description" content="Barangay 186 portal for residents - fill up forms and search resident information." />
   <title>Welcome to Barangay 186</title>
   <link rel="stylesheet" href="assets/css/index.css" />
 </head>
@@ -24,29 +23,31 @@
         <button class="btn btn-search" id="searchBtn">🔍</button>
       </div>
 
-      <!-- Fill-up form and QR scan side by side -->
-      <div class="action-buttons">
-        <button class="fillup-btn" onclick="window.location.href='form.html'">📝 Fill-Up New Form</button>
-        <button class="fillup-btn" id="scanQrBtn">📷 Scan QR Code</button>
+      <div class="button-group">
+        <button class="fillup-btn" onclick="window.location.href='form.html'">Fill-Up New Form</button>
+        <button class="fillup-btn" id="scanQrBtn">Scan QR Code</button>
       </div>
     </div>
-  </main>
 
-  <!-- Modal for QR Scanner -->
-  <div id="qrModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" id="closeModal">&times;</span>
-      <h3>Scan QR Code</h3>
-      <div id="qrScanner"></div>
+    <div id="qrModal" class="qr-modal">
+      <div class="qr-modal-content">
+        <span class="qr-close">&times;</span>
+        <div id="qr-reader" style="width: 100%; height: 400px;"></div>
+      </div>
     </div>
-  </div>
+
+  </main>
 
   <div class="image-footer">
     <img src="assets/images/footer.png" alt="Footer" class="img-fluid w-100" />
   </div>
 
-  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+
   <script src="assets/js/index.js"></script>
+
 </body>
 
 </html>
