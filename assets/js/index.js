@@ -1,4 +1,3 @@
-
 function searchResident() {
   const input = document.getElementById('searchInput').value.trim();
   if (input) {
@@ -6,11 +5,11 @@ function searchResident() {
   }
 }
 
-
 document.getElementById("searchBtn").addEventListener("click", searchResident);
 document.getElementById("searchInput").addEventListener("keyup", function (event) {
   if (event.key === "Enter") searchResident();
 });
+
 
 function updateDateTime() {
   const now = new Date();
@@ -36,21 +35,15 @@ const scanQrBtn = document.getElementById("scanQrBtn");
 const closeBtn = document.querySelector(".qr-close");
 let html5QrCode;
 
-
 scanQrBtn.addEventListener("click", () => {
   qrModal.style.display = "block";
   html5QrCode = new Html5Qrcode("qr-reader");
 
   Html5Qrcode.getCameras().then(cameras => {
     if (cameras && cameras.length) {
-      
-      let cameraId = cameras[0].id;
-      for (const cam of cameras) {
-        if (/back|rear|environment/gi.test(cam.label)) {
-          cameraId = cam.id;
-          break;
-        }
-      }
+    
+      let rearCamera = cameras.find(cam => /back|rear|environment/gi.test(cam.label));
+      const cameraId = rearCamera ? rearCamera.id : cameras[0].id; 
 
       html5QrCode.start(
         cameraId,
@@ -74,7 +67,6 @@ closeBtn.addEventListener("click", () => {
   qrModal.style.display = "none";
   if (html5QrCode) html5QrCode.stop().catch(err => console.error(err));
 });
-
 
 window.addEventListener("click", (event) => {
   if (event.target === qrModal) {
