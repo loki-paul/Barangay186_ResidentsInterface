@@ -1,53 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Barangay 186 portal for residents - fill up forms and search resident information." />
-  <title>Welcome to Barangay 186</title>
+  <title>Barangay 186 Portal</title>
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
   <link rel="stylesheet" href="assets/css/index.css" />
 </head>
+<body class="d-flex flex-column min-vh-100">
 
-<body>
+  <header class="position-relative">
+    <img src="assets/images/header.png" class="img-fluid w-100" alt="Header" />
+    <div id="datetimeTop" class="datetime-overlay position-absolute top-0 end-0 m-2 p-2 bg-dark text-white rounded"></div>
+  </header>
 
-  <div class="image-header">
-    <img src="assets/images/header.png" alt="Header" class="img-fluid w-100" />
-    <div id="datetimeTop" class="datetime-overlay"></div>
-  </div>
+  <main class="flex-grow-1 d-flex justify-content-center align-items-center py-4">
+    <div class="search-wrapper p-4 bg-white rounded shadow text-center w-100" style="max-width: 600px;">
 
-  <main>
-    <div class="search-wrapper">
-      <div class="input-group mb-3">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search Name / user_id..." />
-        <button class="btn btn-search" id="searchBtn">🔍</button>
-      </div>
+<div class="input-group mb-3">
+  <input type="text" id="searchInput" class="form-control" placeholder="Search Name / user_id...">
+  <button id="searchBtn" class="btn btn-primary">🔍</button>
+</div>
 
-      <div class="button-group">
-        <button class="fillup-btn" onclick="window.location.href='form.html'">Fill-Up New Form</button>
-        <button class="fillup-btn" id="scanQrBtn">Scan QR Code</button>
+
+
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <button class="btn btn-primary flex-grow-1 flex-sm-grow-0" style="min-width: 120px;" onclick="window.location.href='form.html'">Fill-Up Form</button>
+        <button class="btn btn-success flex-grow-1 flex-sm-grow-0" style="min-width: 120px;" id="scanQrBtn">Scan QR Code</button>
       </div>
     </div>
 
     <div id="qrModal" class="qr-modal">
       <div class="qr-modal-content">
         <span class="qr-close">&times;</span>
-        <div id="qr-reader" style="width: 100%; height: 400px;"></div>
+        <div id="qr-reader" style="width: 100%;"></div>
       </div>
     </div>
 
   </main>
 
-  <div class="image-footer">
-    <img src="assets/images/footer.png" alt="Footer" class="img-fluid w-100" />
-  </div>
+  <footer class="mt-auto">
+    <img src="assets/images/footer.png" class="img-fluid w-100" alt="Footer" />
+  </footer>
 
-
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
-
+  <!-- JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="assets/js/index.js"></script>
-
 </body>
-
 </html>
