@@ -122,6 +122,7 @@ window.onload = () => {
 };
 
 function goBack() {
-  window.location.href = "search.html";
+  window.location.href = "index.html";
 }
+
 
