@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbzVREmQ5BtvLXBz3BLxb3dE9J1p2PDttyBmzAXdcfJi99ugs2AnZBr3p6HOOd3L5nPNew/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbwsYM7hU9ldj68rs_auT1Z4vvnmOXoDbZYJn3vKOA3FBP0QXRQO-1Uls8PwyOOwacPLHQ/exec";
 
 // Get resident ID from URL parameters
 const urlParams = new URLSearchParams(window.location.search);
@@ -60,3 +60,4 @@ document.getElementById("modal-ok-btn").addEventListener("click", function() {
 document.getElementById("back-btn").addEventListener("click", function() {
   window.history.back();
 });
+
