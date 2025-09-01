@@ -23,8 +23,8 @@ body::before {
 
 .datetime-overlay {
   font-size: 16px;
-  font-family: 'Tahoma';
 }
+
 
 .search-wrapper {
   background: rgba(255, 255, 255, 0.95);
@@ -35,8 +35,8 @@ body::before {
   display: none;
   position: fixed;
   z-index: 1050;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
@@ -74,6 +74,7 @@ body::before {
   background: #e60000;
 }
 
+
 .input-group .form-control {
   font-size: 16px;
 }
@@ -81,4 +82,98 @@ body::before {
 .input-group .btn {
   font-size: 16px;
   padding: 10px 16px;
+}
+
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; 
+  width: 250px;
+  max-width: 80%;
+  height: 100%;
+  background-color: #343a40;
+  color: white;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1055;
+  overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar h4 a {
+  color: #fd8a5c;
+  font-size: 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+}
+.sidebar h4 a:hover {
+  text-decoration: underline;
+}
+.sidebar ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.sidebar ul li {
+  margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.sidebar ul li a:hover {
+  text-decoration: underline;
+}
+
+
+#sidebarToggle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1101; 
+  border-radius: 0 5px 5px 0;
+  padding: 10px 15px;
+  font-size: 1.2rem;
+}
+
+
+#sidebarOverlay {
+  display: none; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 1050;
+}
+
+.sidebar.active ~ #sidebarOverlay {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80%;
+    left: auto;
+    right: -80%;
+  }
+  .sidebar.active {
+    right: 0;
+  }
+  .sidebar h4 {
+    font-size: 1.5rem;
+  }
+  .sidebar ul li a {
+    font-size: 1.2rem;
+  }
 }
